@@ -1,25 +1,42 @@
-import { Link, useNavigate } from 'react-router-dom';
-
-import Modal from '../UI/Modal.jsx';
-import EventForm from './EventForm.jsx';
+import { Link, useNavigate } from "react-router-dom";
+import { useMutation } from "@tanstack/react-query";
+import { createNewEvent } from "../../utils/http.js";
+import Modal from "../UI/Modal.jsx";
+import EventForm from "./EventForm.jsx";
+import ErrorBlock from "../UI/ErrorBlock.jsx";
 
 export default function NewEvent() {
   const navigate = useNavigate();
 
-  function handleSubmit(formData) {}
+  //call mutate to send request
+  const { mutate, isPending, isError, error } = useMutation({
+    mutationFn: createNewEvent,
+  });
+  function handleSubmit(formData) {
+    mutate({ event: formData });
+  }
 
   return (
-    <Modal onClose={() => navigate('../')}>
+    <Modal onClose={() => navigate("../")}>
       <EventForm onSubmit={handleSubmit}>
-        <>
-          <Link to="../" className="button-text">
-            Cancel
-          </Link>
-          <button type="submit" className="button">
-            Create
-          </button>
-        </>
+        {isPending && "Submitting..."}
+        {!isPending && (
+          <>
+            <Link to="../" className="button-text">
+              Cancel
+            </Link>
+            <button type="submit" className="button">
+              Create
+            </button>
+          </>
+        )}
       </EventForm>
+      {isError && (
+        <ErrorBlock
+          title={"Failed to create Event"}
+          message={error.info.message || "Server Error"}
+        />
+      )}
     </Modal>
   );
 }
