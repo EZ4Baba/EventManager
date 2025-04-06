@@ -75,6 +75,7 @@ export async function deleteEvent(eventID) {
     error.info = await res.json();
     throw error;
   }
+
   const data = await res.json();
-  console.log(data);
+  return data;
 }
