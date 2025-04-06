@@ -7,18 +7,20 @@ import ErrorBlock from "../UI/ErrorBlock.jsx";
 
 export default function NewEvent() {
   const navigate = useNavigate();
-
   //call mutate to send request
   const { mutate, isPending, isError, error } = useMutation({
     mutationFn: createNewEvent,
     onSuccess: () => {
       // to refetch data
-      queryClient.invalidateQueries();
+      queryClient.invalidateQueries({
+        queryKey: ["events"],
+      });
       // only naviagate to home page on success
       navigate("/events");
     },
   });
   function handleSubmit(formData) {
+    //send the data to backend
     mutate({ event: formData });
   }
 

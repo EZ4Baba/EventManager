@@ -15,7 +15,6 @@ export default function EventForm({ inputData, onSubmit, children }) {
   function handleSelectImage(image) {
     setSelectedImage(image);
   }
-  console.log(data);
 
   function handleSubmit(event) {
     event.preventDefault();

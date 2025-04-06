@@ -48,3 +48,33 @@ export async function fetchSelectableImages({ signal }) {
   const { images } = await res.json();
   return images;
 }
+export async function fetchEventDetails({ signal, id }) {
+  const response = await fetch("http://localhost:3000/events/" + id, {
+    signal,
+  });
+  if (!response.ok) {
+    const error = new Error("Cant Find Event Details");
+    error.code = res.status;
+    error.info = await res.json();
+    throw error;
+  }
+  const { event } = await response.json();
+  return event;
+}
+
+export async function deleteEvent(eventID) {
+  const res = await fetch("http://localhost:3000/events/" + eventID, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  if (!res.ok) {
+    const error = new Error("Could not delete event");
+    error.code = res.status;
+    error.info = await res.json();
+    throw error;
+  }
+  const data = await res.json();
+  console.log(data);
+}
